@@ -102,6 +102,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         parameters=[
             # robot_description,
             robot_description_semantic,
+            {"publish_robot_description_semantic": True},
             robot_description_kinematics,
             robot_description_planning,
             ompl_planning_pipeline_config,

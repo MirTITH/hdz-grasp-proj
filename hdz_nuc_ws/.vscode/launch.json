@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "ROS: Launch",
+            "type": "ros",
+            "request": "launch",
+            "target": "${file}"
+        },
+        {
             "name": "当前 launch.py",
             "type": "debugpy",
             "request": "launch",
@@ -15,12 +21,6 @@
             ],
             "console": "integratedTerminal",
             "justMyCode": false
-        },
-        {
-            "name": "ROS: Launch",
-            "type": "ros",
-            "request": "launch",
-            "target": "${file}"
         },
     ]
 }
