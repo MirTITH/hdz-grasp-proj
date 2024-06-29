@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hdz">
+  <xacro:include filename="$(find hdz_base_description)/urdf/hdz_base_macro.xacro" />
+
+  <link name="world" />
+
+  <xacro:hdz_base_description parent="world" tf_prefix="hdz_">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:hdz_base_description>
+</robot>

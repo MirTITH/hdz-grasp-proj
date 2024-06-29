@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<robot name="hdz_full" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:arg name="use_fake_hardware" default="false" />
+    <xacro:arg name="fake_sensor_commands" default="false" />
+
+    <!-- The "world" link -->
+    <link name="world" />
+
+    <!-- 撼地者底座 -->
+    <xacro:arg name="hdz_tf_prefix" default="hdz_" />
+    <xacro:include filename="$(find hdz_base_description)/urdf/hdz_base_macro.xacro" />
+    <xacro:hdz_base_description parent="world" tf_prefix="hdz_">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:hdz_base_description>
+
+    <!-- UR arm -->
+    <xacro:arg name="ur_parent" default="$(arg hdz_tf_prefix)ur_base_link" />
+    <xacro:include filename="$(find hdz_full_description)/urdf/ur5e.urdf.xacro" />
+
+    <!-- <link name="tool0"/>
+    <joint name="tool0_joint" type="fixed">
+        <parent link="$(arg hdz_tf_prefix)ur_base_link"/>
+        <child link="tool0"/>
+        <origin xyz="0.0 0.0 0.5" rpy="0.0 0.0 0.0"/>
+    </joint> -->
+
+    <!-- 抓取中心 -->
+    <link name="grasp_center_link" />
+    <joint name="grasp_center_joint" type="fixed">
+        <parent link="tool0" />
+        <child link="grasp_center_link" />
+        <origin xyz="0 0 0.18" rpy="0 0 0" />
+    </joint>
+
+    <!-- DH Robotics AG95 Gripper -->
+    <xacro:include filename="$(find hdz_full_description)/urdf/dh_ag95_gripper.xacro" />
+
+    <!-- d435i depth camera -->
+    <xacro:include filename="$(find hdz_full_description)/urdf/d435i.xacro" />
+</robot>

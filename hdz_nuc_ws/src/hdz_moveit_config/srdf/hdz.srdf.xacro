@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="hdz_full">
+
+  <!-- parameters -->
+  <xacro:arg name="tf_prefix" default="" />
+
+  <xacro:include filename="$(find hdz_moveit_config)/srdf/hdz_macro.srdf.xacro" />
+
+  <xacro:hdz_srdf prefix="$(arg tf_prefix)" />
+
+</robot>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- parameters -->
+    <xacro:arg name="ag95_prefix" default="" />
+    <xacro:arg name="ag95_com_port" default="" />
+    <!-- <xacro:arg name="use_mock_hardware" default="false" />
+    <xacro:arg name="mock_sensor_commands" default="false" /> -->
+
+    <!-- import main macro -->
+    <xacro:include filename="$(find dh_ag95_description)/urdf/dh_ag95_macro.xacro" />
+    <xacro:include filename="$(find dh_gripper_driver)/urdf/dh_ag95.ros2_control.xacro" />
+
+    <!-- gripper -->
+    <xacro:dh_ag95_gripper prefix="$(arg ag95_prefix)" parent="tool0">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:dh_ag95_gripper>
+
+    <!-- ros2_control -->
+    <xacro:dh_ag95_gripper_ros2_control
+        name="dh_ag95_gripper"
+        prefix="$(arg ag95_prefix)"
+        com_port="$(arg ag95_com_port)"
+        use_mock_hardware="$(arg use_fake_hardware)"
+        mock_sensor_commands="$(arg fake_sensor_commands)"
+    />
+</robot>
