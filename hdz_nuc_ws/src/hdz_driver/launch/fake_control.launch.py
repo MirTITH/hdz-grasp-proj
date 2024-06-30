@@ -84,7 +84,7 @@ def launch_setup(context, *args, **kwargs):
             Node(
                 package="rviz2",
                 executable="rviz2",
-                name="rviz2",
+                name="rviz2_hdz_driver",
                 output="log",
                 arguments=["-d", rviz_config_file],
             )

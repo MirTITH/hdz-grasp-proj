@@ -6,7 +6,7 @@ script_dir=$(cd $(dirname $0); pwd)
 package_path_prefix="$script_dir/non_ros_pkgs"
 install_dir="$package_path_prefix/install"
 
-export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:$install_dir/lib/cmake
+export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:$install_dir
 
 # 检测 ninja 是否安装
 if ! command -v ninja &> /dev/null; then

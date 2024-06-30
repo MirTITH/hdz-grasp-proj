@@ -4,6 +4,10 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <fmt/core.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_ros/buffer.h>
+#include <tf2/convert.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
 class MoveItNode : public rclcpp::Node
 {
@@ -11,6 +15,7 @@ public:
     std::shared_ptr<moveit::planning_interface::MoveGroupInterface> move_group_;
     double max_velocity_scaling_factor_     = 0.05;
     double max_acceleration_scaling_factor_ = 0.05;
+    std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
 
 public:
     MoveItNode(const std::string &node_name)
@@ -23,6 +28,8 @@ public:
         max_velocity_scaling_factor_     = this->get_parameter("max_velocity_scaling_factor").as_double();
         max_acceleration_scaling_factor_ = this->get_parameter("max_acceleration_scaling_factor").as_double();
         LogInfo("Planning group: {}", planning_group_);
+        tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+        tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
     }
 
     void Init()
@@ -99,6 +106,12 @@ public:
         return planning_group_;
     }
 
+    template <typename T>
+    void Print(const T &msg, const std::string &prefix = "")
+    {
+        Print(this->get_logger(), msg, prefix);
+    }
+
     static void Print(const rclcpp::Logger &logger, const geometry_msgs::msg::PoseStamped &msg, const std::string &prefix = "")
     {
         RCLCPP_INFO(logger, "%sheader: {frame_id: %s, stamp: %d.%d}\npose: {position: [%lf, %lf, %lf], orientation: [%lf, %lf, %lf, %lf]}",
@@ -125,6 +138,7 @@ public:
 
 private:
     std::string planning_group_;
+    std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
 
     template <typename... Args>
     void LogInfo(const std::string &format_str, Args &&...args) const

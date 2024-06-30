@@ -11,7 +11,14 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 from hdz_scripts import add_use_sim_time, get_this_package_share_directory, get_this_package_name
 from launch.launch_context import LaunchContext
 from launch_ros.parameter_descriptions import ParameterValue
+import yaml
 
+def common_load_yaml(file_path):
+    try:
+        with open(file_path, "r") as file:
+            return yaml.load(file, Loader=yaml.FullLoader)
+    except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
+        return None
 
 def launch_setup(context: LaunchContext, *args, **kwargs):
     this_package_share_directory = get_this_package_share_directory(context)
@@ -42,7 +49,8 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     )
     robot_description_semantic = {"robot_description_semantic": robot_description_semantic_content}
 
-    robot_description_kinematics = PathJoinSubstitution([this_package_share_directory, "config", "kinematics.yaml"])
+    kinematics_file = os.path.join(this_package_share_directory, "config", "kinematics.yaml")
+    robot_description_kinematics = common_load_yaml(kinematics_file)
 
     robot_description_planning = {
         "robot_description_planning": ur_load_yaml(
@@ -103,7 +111,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
             # robot_description,
             robot_description_semantic,
             {"publish_robot_description_semantic": True},
-            robot_description_kinematics,
+            {"robot_description_kinematics": robot_description_kinematics},
             robot_description_planning,
             ompl_planning_pipeline_config,
             trajectory_execution,
@@ -126,7 +134,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         parameters=[
             robot_description_semantic,
             ompl_planning_pipeline_config,
-            robot_description_kinematics,
+            {"robot_description_kinematics": robot_description_kinematics},
             robot_description_planning,
             warehouse_ros_config,
         ],
@@ -184,6 +192,6 @@ def generate_launch_description():
         )
     )
     declared_arguments.append(DeclareLaunchArgument("gui", default_value="true", description="Launch RViz?"))
-    declared_arguments.append(DeclareLaunchArgument("launch_servo", default_value="true", description="Launch Servo?"))
+    declared_arguments.append(DeclareLaunchArgument("launch_servo", default_value="false", description="Launch Servo?"))
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

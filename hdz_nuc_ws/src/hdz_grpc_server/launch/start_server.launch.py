@@ -25,6 +25,8 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     )
     robot_description_kinematics = load_yaml(kinematics_file)
 
+    print(f"robot_description_kinematics: {robot_description_kinematics}")
+
     launch_entities.append(
         Node(
             package=this_package_name,
@@ -36,6 +38,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
                 {"max_velocity_scaling_factor": 0.15},
                 {"max_acceleration_scaling_factor": 0.15},
                 {"planning_group": "ur_manipulator"},
+                {"grpc_server_address": "0.0.0.0:9999"},
             ],
         )
     )

@@ -2,7 +2,7 @@
 
 script_dir=$(cd $(dirname $0); pwd)
 grpc_dir=$script_dir/../hdz_grpc_msg/proto
-grpc_proto_file=$grpc_dir/hdz_grpc_msg/helloworld.proto
+grpc_proto_file=$grpc_dir/hdz_grpc_msg/hdz_grpc_msg.proto
 
 # Generate gRPC code
 python3 -m grpc_tools.protoc \

@@ -13,7 +13,7 @@ set(PROTO_IMPORT_DIRS "${CMAKE_CURRENT_LIST_DIR}/proto")
 file(MAKE_DIRECTORY ${PROTO_BINARY_DIR})
 
 add_library(${PROJECT_NAME}
-    proto/hdz_grpc_msg/helloworld.proto
+    proto/hdz_grpc_msg/hdz_grpc_msg.proto
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

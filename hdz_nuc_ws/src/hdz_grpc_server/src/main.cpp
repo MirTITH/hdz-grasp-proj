@@ -21,8 +21,11 @@ int main(int argc, char *argv[])
     kLogger.Info("Available Planning Groups: {}", moveit_node->move_group_->getJointModelGroupNames());
 
     // gRPC Server
-    kLogger.Info("Starting grpc server...");
-    HdzGrpcServer grpc_server{"0.0.0.0:8888"};
+    std::string grpc_server_address = "0.0.0.0:9999"; // This is the default value
+    moveit_node->get_parameter("grpc_server_address", grpc_server_address);
+
+    kLogger.Info("Starting grpc server on {}", grpc_server_address);
+    HdzGrpcServer grpc_server{grpc_server_address, moveit_node};
     grpc_server.Start();
 
     // Wait for executor thread to finish
