@@ -43,11 +43,52 @@ grpc::Status MoveGraspServiceImpl::MoveTo(::grpc::ServerContext *context, const 
 
     try {
         moveit_node_->SetTargetPose(target_pose);
+        moveit_node_->PlanAndMove();
     } catch (const std::exception &e) {
         response->set_is_success(false);
         response->set_msg(e.what());
         return grpc::Status::OK;
     }
+
+    response->set_is_success(true);
+    return grpc::Status::OK;
+}
+
+grpc::Status MoveGraspServiceImpl::MoveToNamed(::grpc::ServerContext *context, const ::hdz_grpc_msg::StrMsg *request, ::hdz_grpc_msg::BoolWithMsg *response)
+{
+    (void)context;
+    kLogger.Info("Received move_to_named request:");
+    kLogger.Info("    target: {}", request->str());
+
+    try {
+        moveit_node_->SetTargetByName(request->str());
+        moveit_node_->PlanAndMove();
+    } catch (const std::exception &e) {
+        response->set_is_success(false);
+        response->set_msg(e.what());
+        return grpc::Status::OK;
+    }
+
+    response->set_is_success(true);
+    return grpc::Status::OK;
+}
+grpc::Status MoveGraspServiceImpl::MoveToJointPosition(::grpc::ServerContext *context, const ::hdz_grpc_msg::Array *request, ::hdz_grpc_msg::BoolWithMsg *response)
+{
+    (void)context;
+    kLogger.Info("Received move_to_joint_position request:");
+
+    auto joint_group_positions = moveit_node_->GetJointPos();
+    if (joint_group_positions.size() != (size_t)request->data().size()) {
+        response->set_is_success(false);
+        response->set_msg("Invalid joint position size");
+        return grpc::Status::OK;
+    }
+
+    for (size_t i = 0; i < joint_group_positions.size(); ++i) {
+        joint_group_positions[i] = request->data(i);
+    }
+
+    moveit_node_->move_group_->setJointValueTarget(joint_group_positions);
 
     try {
         moveit_node_->PlanAndMove();
@@ -57,5 +98,11 @@ grpc::Status MoveGraspServiceImpl::MoveTo(::grpc::ServerContext *context, const 
         return grpc::Status::OK;
     }
 
+    response->set_is_success(true);
     return grpc::Status::OK;
+}
+
+grpc::Status MoveGraspServiceImpl::SetGripper(::grpc::ServerContext *context, const ::hdz_grpc_msg::SetGripperRequest *request, ::hdz_grpc_msg::BoolWithMsg *response)
+{
+    (void)context;
 }
