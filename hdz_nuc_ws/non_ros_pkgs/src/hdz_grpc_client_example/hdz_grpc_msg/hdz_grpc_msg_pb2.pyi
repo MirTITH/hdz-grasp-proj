@@ -7,12 +7,14 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class SetGripperRequest(_message.Message):
-    __slots__ = ("grasp_depth", "normalized_width")
+    __slots__ = ("grasp_depth", "normalized_width", "max_effort")
     GRASP_DEPTH_FIELD_NUMBER: _ClassVar[int]
     NORMALIZED_WIDTH_FIELD_NUMBER: _ClassVar[int]
+    MAX_EFFORT_FIELD_NUMBER: _ClassVar[int]
     grasp_depth: float
     normalized_width: float
-    def __init__(self, grasp_depth: _Optional[float] = ..., normalized_width: _Optional[float] = ...) -> None: ...
+    max_effort: float
+    def __init__(self, grasp_depth: _Optional[float] = ..., normalized_width: _Optional[float] = ..., max_effort: _Optional[float] = ...) -> None: ...
 
 class Array(_message.Message):
     __slots__ = ("data",)

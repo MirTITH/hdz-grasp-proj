@@ -10,7 +10,7 @@ service Greeter {
   rpc SayHello (StrMsg) returns (StrMsg);
 }
 
-service MoveGrasp {
+service Arm {
   rpc MoveTo (PoseStamped) returns (BoolWithMsg);
   rpc MoveToJointPosition (Array) returns (BoolWithMsg);
   rpc MoveToNamed (StrMsg) returns (BoolWithMsg);
@@ -24,6 +24,7 @@ service MoveGrasp {
 message SetGripperRequest {
   double grasp_depth = 1; // In meters.
   double normalized_width = 2; // 0.0 to 1.0. 0.0 is closed, 1.0 is open.
+  double max_effort = 3;
 }
 
 message Array {

@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "start_server.launch.py",
+            "type": "ros",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/hdz_grpc_server/launch/start_server.launch.py"
+        },
+        {
             "name": "ROS: Launch",
             "type": "ros",
             "request": "launch",

@@ -25,8 +25,6 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     )
     robot_description_kinematics = load_yaml(kinematics_file)
 
-    print(f"robot_description_kinematics: {robot_description_kinematics}")
-
     launch_entities.append(
         Node(
             package=this_package_name,
@@ -39,6 +37,9 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
                 {"max_acceleration_scaling_factor": 0.15},
                 {"planning_group": "ur_manipulator"},
                 {"grpc_server_address": "0.0.0.0:9999"},
+                {"gripper_action_name": "/gripper_controller/gripper_cmd"},
+                {"gripper_close_joint_pos": 0.93},
+                {"gripper_open_joint_pos": 0.0},
             ],
         )
     )

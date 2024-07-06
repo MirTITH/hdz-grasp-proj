@@ -1,7 +1,7 @@
 import logging
 import grpc
 from hdz_grpc_msg import hdz_grpc_msg_pb2, hdz_grpc_msg_pb2_grpc
-from hdz_grpc_msg.hdz_grpc_msg_pb2 import PoseStamped, Pose, Point, Quaternion
+from hdz_grpc_msg.hdz_grpc_msg_pb2 import PoseStamped, Pose, Point, Quaternion, SetGripperRequest
 
 
 def run():
@@ -12,10 +12,10 @@ def run():
     with grpc.insecure_channel("localhost:9999") as channel:
         stub = hdz_grpc_msg_pb2_grpc.GreeterStub(channel)
         response = stub.SayHello(hdz_grpc_msg_pb2.StrMsg(str="client example"))
-        print("Greeter client received: " + response.str)
+        print(f"Greeter client received: " + response.str)
 
-        move_grasp_stub = hdz_grpc_msg_pb2_grpc.MoveGraspStub(channel)
-        move_grasp_response = move_grasp_stub.MoveTo(
+        arm_stub = hdz_grpc_msg_pb2_grpc.ArmStub(channel)
+        arm_response = arm_stub.MoveTo(
             PoseStamped(
                 frame_name="tool0",
                 pose=Pose(
@@ -24,7 +24,15 @@ def run():
                 ),
             )
         )
-        print(f"MoveGrasp client received: {move_grasp_response}")
+        print(f"Arm client received: {arm_response}")
+
+        gripper_response = arm_stub.SetGripper(
+            SetGripperRequest(
+                normalized_width=0.5,
+                max_effort=10,
+            )
+        )
+        print(f"Gripper client received: {gripper_response}")
 
 
 if __name__ == "__main__":

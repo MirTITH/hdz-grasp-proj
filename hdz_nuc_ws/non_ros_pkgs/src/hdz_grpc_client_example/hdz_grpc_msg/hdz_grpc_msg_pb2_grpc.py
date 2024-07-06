@@ -109,7 +109,7 @@ class Greeter(object):
             _registered_method=True)
 
 
-class MoveGraspStub(object):
+class ArmStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -119,38 +119,38 @@ class MoveGraspStub(object):
             channel: A grpc.Channel.
         """
         self.MoveTo = channel.unary_unary(
-                '/hdz_grpc_msg.MoveGrasp/MoveTo',
+                '/hdz_grpc_msg.Arm/MoveTo',
                 request_serializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.PoseStamped.SerializeToString,
                 response_deserializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.BoolWithMsg.FromString,
                 _registered_method=True)
         self.MoveToJointPosition = channel.unary_unary(
-                '/hdz_grpc_msg.MoveGrasp/MoveToJointPosition',
+                '/hdz_grpc_msg.Arm/MoveToJointPosition',
                 request_serializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.Array.SerializeToString,
                 response_deserializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.BoolWithMsg.FromString,
                 _registered_method=True)
         self.MoveToNamed = channel.unary_unary(
-                '/hdz_grpc_msg.MoveGrasp/MoveToNamed',
+                '/hdz_grpc_msg.Arm/MoveToNamed',
                 request_serializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.StrMsg.SerializeToString,
                 response_deserializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.BoolWithMsg.FromString,
                 _registered_method=True)
         self.SetGripper = channel.unary_unary(
-                '/hdz_grpc_msg.MoveGrasp/SetGripper',
-                request_serializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.StrMsg.SerializeToString,
+                '/hdz_grpc_msg.Arm/SetGripper',
+                request_serializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.SetGripperRequest.SerializeToString,
                 response_deserializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.BoolWithMsg.FromString,
                 _registered_method=True)
         self.GetPose = channel.unary_unary(
-                '/hdz_grpc_msg.MoveGrasp/GetPose',
+                '/hdz_grpc_msg.Arm/GetPose',
                 request_serializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.StrMsg.SerializeToString,
                 response_deserializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.PoseStamped.FromString,
                 _registered_method=True)
         self.GetJointPosition = channel.unary_unary(
-                '/hdz_grpc_msg.MoveGrasp/GetJointPosition',
+                '/hdz_grpc_msg.Arm/GetJointPosition',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.Array.FromString,
                 _registered_method=True)
 
 
-class MoveGraspServicer(object):
+class ArmServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def MoveTo(self, request, context):
@@ -190,7 +190,7 @@ class MoveGraspServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_MoveGraspServicer_to_server(servicer, server):
+def add_ArmServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'MoveTo': grpc.unary_unary_rpc_method_handler(
                     servicer.MoveTo,
@@ -209,7 +209,7 @@ def add_MoveGraspServicer_to_server(servicer, server):
             ),
             'SetGripper': grpc.unary_unary_rpc_method_handler(
                     servicer.SetGripper,
-                    request_deserializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.StrMsg.FromString,
+                    request_deserializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.SetGripperRequest.FromString,
                     response_serializer=hdz__grpc__msg_dot_hdz__grpc__msg__pb2.BoolWithMsg.SerializeToString,
             ),
             'GetPose': grpc.unary_unary_rpc_method_handler(
@@ -224,13 +224,13 @@ def add_MoveGraspServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'hdz_grpc_msg.MoveGrasp', rpc_method_handlers)
+            'hdz_grpc_msg.Arm', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('hdz_grpc_msg.MoveGrasp', rpc_method_handlers)
+    server.add_registered_method_handlers('hdz_grpc_msg.Arm', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class MoveGrasp(object):
+class Arm(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -247,7 +247,7 @@ class MoveGrasp(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hdz_grpc_msg.MoveGrasp/MoveTo',
+            '/hdz_grpc_msg.Arm/MoveTo',
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.PoseStamped.SerializeToString,
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.BoolWithMsg.FromString,
             options,
@@ -274,7 +274,7 @@ class MoveGrasp(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hdz_grpc_msg.MoveGrasp/MoveToJointPosition',
+            '/hdz_grpc_msg.Arm/MoveToJointPosition',
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.Array.SerializeToString,
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.BoolWithMsg.FromString,
             options,
@@ -301,7 +301,7 @@ class MoveGrasp(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hdz_grpc_msg.MoveGrasp/MoveToNamed',
+            '/hdz_grpc_msg.Arm/MoveToNamed',
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.StrMsg.SerializeToString,
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.BoolWithMsg.FromString,
             options,
@@ -328,8 +328,8 @@ class MoveGrasp(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hdz_grpc_msg.MoveGrasp/SetGripper',
-            hdz__grpc__msg_dot_hdz__grpc__msg__pb2.StrMsg.SerializeToString,
+            '/hdz_grpc_msg.Arm/SetGripper',
+            hdz__grpc__msg_dot_hdz__grpc__msg__pb2.SetGripperRequest.SerializeToString,
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.BoolWithMsg.FromString,
             options,
             channel_credentials,
@@ -355,7 +355,7 @@ class MoveGrasp(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hdz_grpc_msg.MoveGrasp/GetPose',
+            '/hdz_grpc_msg.Arm/GetPose',
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.StrMsg.SerializeToString,
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.PoseStamped.FromString,
             options,
@@ -382,7 +382,7 @@ class MoveGrasp(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hdz_grpc_msg.MoveGrasp/GetJointPosition',
+            '/hdz_grpc_msg.Arm/GetJointPosition',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             hdz__grpc__msg_dot_hdz__grpc__msg__pb2.Array.FromString,
             options,
