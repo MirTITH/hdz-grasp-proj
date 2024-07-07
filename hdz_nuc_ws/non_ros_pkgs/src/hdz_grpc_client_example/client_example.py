@@ -9,27 +9,27 @@ def run():
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
     print("Will try to greet world ...")
-    with grpc.insecure_channel("localhost:9999") as channel:
+    with grpc.insecure_channel("192.168.1.150:9999") as channel:
         stub = hdz_grpc_msg_pb2_grpc.GreeterStub(channel)
         response = stub.SayHello(hdz_grpc_msg_pb2.StrMsg(str="client example"))
         print(f"Greeter client received: " + response.str)
 
         arm_stub = hdz_grpc_msg_pb2_grpc.ArmStub(channel)
-        arm_response = arm_stub.MoveTo(
-            PoseStamped(
-                frame_name="tool0",
-                pose=Pose(
-                    position=hdz_grpc_msg_pb2.Point(x=0, y=0, z=0.05),
-                    orientation=hdz_grpc_msg_pb2.Quaternion(x=0, y=0, z=0, w=1),
-                ),
-            )
-        )
-        print(f"Arm client received: {arm_response}")
+        # arm_response = arm_stub.MoveTo(
+        #     PoseStamped(
+        #         frame_name="tool0",
+        #         pose=Pose(
+        #             position=hdz_grpc_msg_pb2.Point(x=0, y=0, z=0.05),
+        #             orientation=hdz_grpc_msg_pb2.Quaternion(x=0, y=0, z=0, w=1),
+        #         ),
+        #     )
+        # )
+        # print(f"Arm client received: {arm_response}")
 
         gripper_response = arm_stub.SetGripper(
             SetGripperRequest(
                 normalized_width=0.5,
-                max_effort=10,
+                max_effort=0.01,
             )
         )
         print(f"Gripper client received: {gripper_response}")
