@@ -20,3 +20,8 @@ class FrameRateCounter:
             return 0.0
 
         return (num_timestamps - 1) / (self.timestamps[-1] - self.timestamps[-num_timestamps])
+
+    def print_info(self, prefix=""):
+        fps = self.get_fps(2)
+        avg_fps = self.get_fps()
+        print(f"{prefix}FPS: {fps:.2f}, Avg FPS: {avg_fps:.2f}")
