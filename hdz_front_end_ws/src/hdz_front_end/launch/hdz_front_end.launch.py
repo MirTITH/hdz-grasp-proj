@@ -11,7 +11,8 @@ def launch_setup(context, *args, **kwargs):
         Node(
             package=kThisPackageName,
             executable="hdz_front_end",
-            output="both",
+            output="screen",
+            emulate_tty=True,
             parameters=[
                 {
                     # "robot_description": robot_description_content,
