@@ -9,8 +9,10 @@ from .data_aligner import DataAligner, AlignedDataCollection
 from sensor_msgs_py import point_cloud2
 from .point_cloud_utils import PointCloudUtils
 from .grasp_model_client import GraspModelClient
-
 import numpy as np
+from tf2_ros import TransformBroadcaster, StaticTransformBroadcaster
+from geometry_msgs.msg import TransformStamped
+from scipy.spatial.transform import Rotation
 
 
 def ShowImage(img_msg: Image, window_name: str):
@@ -51,6 +53,9 @@ class HdzFrontEndNode(Node):
 
         self.pcl_pub = self.create_publisher(PointCloud2, "hdz_front_end/point_cloud", 10)
 
+        self.pcl_np = None
+        self.pcl_np_frame_name = ""
+
         self.data_aligner = DataAligner(
             data_configs=[
                 {"name": "rgb", "maxlen": 5},
@@ -62,9 +67,10 @@ class HdzFrontEndNode(Node):
         )
         self.data_aligner_fps_counter = FrameRateCounter(1000)
 
-        # self.grasp_model_client = GraspModelClient("localhost", 50051)
+        self.grasp_model_client = GraspModelClient("localhost", 50051)
 
         self.timer = self.create_timer(1.0, self.timer_callback)
+        self.tf_broadcaster = TransformBroadcaster(self)
 
     def info_callback(self, msg):
         self.pcl_util.set_intrinsics(msg.k)
@@ -77,7 +83,7 @@ class HdzFrontEndNode(Node):
 
     def align_callback(self, data_collection: AlignedDataCollection):
         self.data_aligner_fps_counter.tick()
-        self.data_aligner_fps_counter.print_info("Data aligner: ")
+        # self.data_aligner_fps_counter.print_info("Data aligner: ")
 
         rgb_msg: Image = data_collection.data_dict["rgb"].data
         depth_msg: Image = data_collection.data_dict["depth"].data
@@ -105,12 +111,33 @@ class HdzFrontEndNode(Node):
 
         depth_np = self.pcl_util.convert_depth_msg_to_np(depth_msg)
         pcl_np = self.pcl_util.generate_pcl_np(depth_np)
+        self.pcl_np = pcl_np
+        self.pcl_np_frame_name = depth_msg.header.frame_id
         if pcl_np is not None:
             pcl_msg = self.pcl_util.convert_pcl_to_msg(pcl_np, rgb_msg.header)
             self.pcl_pub.publish(pcl_msg)
 
     def timer_callback(self):
-        self.get_logger().info("Timer callback")
+        if self.pcl_np is not None:
+            response = self.grasp_model_client.generate_from_pointcloud(self.pcl_np, self.pcl_np_frame_name)
+            self.get_logger().info(str(response))
+            self.broadcast_grasp_target(response.pose.position, response.pose.orientation, self.pcl_np_frame_name)
+
+    def broadcast_grasp_target(self, position, quat, frame_id, target_name="grasp_target"):
+        t = TransformStamped()
+
+        t.header.stamp = self.get_clock().now().to_msg()
+        t.header.frame_id = frame_id
+        t.child_frame_id = target_name
+        t.transform.translation.x = position.x
+        t.transform.translation.y = position.y
+        t.transform.translation.z = position.z
+        t.transform.rotation.x = quat.x
+        t.transform.rotation.y = quat.y
+        t.transform.rotation.z = quat.z
+        t.transform.rotation.w = quat.w
+
+        self.tf_broadcaster.sendTransform(t)
 
 
 def main(args=None):
