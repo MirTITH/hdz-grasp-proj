@@ -90,7 +90,7 @@ class DataAligner:
         ), f"Data name '{name}' not in the list of data names: {self.data_queue_dict.keys()}"
 
         if timestamp is None:
-            timestamp = self.__get_timestamp(data)
+            timestamp = self.get_timestamp(data)
 
         if not self.__check_if_timestamp_is_increasing(self.data_queue_dict[name], timestamp, name):
             kLogger.warning(f"Ignoring {name}")
@@ -173,7 +173,7 @@ class DataAligner:
         self.candidate_result.data_dict[self.reference_data] = next_data
         self.__update_candidate_result_with_all_other_data()
 
-    def __get_timestamp(self, msg) -> float:
+    def get_timestamp(self, msg) -> float:
         """Get timestamp from ros message with header"""
         return msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
 

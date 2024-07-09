@@ -21,8 +21,8 @@ class PointCloudUtils:
     def generate_pcl_np(
         self,
         depth_image: np.ndarray,
-        mask: Optional[np.ndarray] = None,
-    ) -> np.ndarray:
+        additional_mask: Optional[np.ndarray] = None,
+    ) -> Optional[np.ndarray]:
         if self.intrinsics is None:
             return None
 
@@ -35,6 +35,10 @@ class PointCloudUtils:
 
         # Mask out points where depth is zero
         mask = depth_image > 0
+
+        if additional_mask is not None:
+            mask = np.logical_and(additional_mask, mask)
+
         z = depth_image[mask] / 1000.0  # Convert depth image from mm to meters
         u = u[mask]
         v = v[mask]
@@ -52,7 +56,7 @@ class PointCloudUtils:
         self,
         points: np.ndarray,
         header: Header,
-    ) -> np.ndarray:
+    ) -> PointCloud2:
 
         fields = [
             PointField(name="x", offset=0, datatype=PointField.FLOAT32, count=1),
