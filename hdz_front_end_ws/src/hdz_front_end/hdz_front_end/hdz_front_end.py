@@ -58,7 +58,6 @@ class HdzFrontEndNode(Node):
 
         self.user_interface = HdzUserInterface(
             infer_callback=self.__infer_callback,
-            grasp_callback=self.__grasp_callback,
             logger=get_logger("hdz_user_interface"),
         )
 
@@ -165,8 +164,22 @@ class HdzFrontEndNode(Node):
             except Exception as e:
                 self.get_logger().error(f"Error in timer_callback: {e}")
 
-    def __grasp_callback(self, pose):
-        self.get_logger().info(f"Grasp callback. pose = {pose}")
+    def __move_to_callback(self, **kwargs):
+        self.get_logger().info(f"__move_to_callback")
+        pose = kwargs["pose"]
+        self.arm_client.MoveTo(pose)
+
+    def __move_to_named_callback(self, **kwargs):
+        self.get_logger().info(f"__move_to_named_callback")
+        pose_name = kwargs["pose_name"]
+        self.arm_client.MoveToNamed(pose_name)
+
+    def __gripper_callback(self, **kwargs):
+        self.get_logger().info(f"__gripper_callback")
+        normalized_width = kwargs["normalized_width"]
+        max_effort = kwargs["max_effort"]
+        grasp_depth = kwargs["grasp_depth"]
+        self.arm_client.SetGripper(normalized_width, max_effort, grasp_depth)
 
 
 def main(args=None):

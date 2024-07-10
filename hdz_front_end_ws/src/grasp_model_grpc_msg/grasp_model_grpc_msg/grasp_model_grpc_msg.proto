@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package hdz_grpc_msg;
+package grasp_model_grpc_msg;
 
 // import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";

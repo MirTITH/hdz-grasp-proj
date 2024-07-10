@@ -9,6 +9,8 @@ from .common_utils import FrameRateCounter
 from dataclasses import dataclass
 import numpy as np
 from typing import Optional
+from .hdz_grpc_arm_client import HdzGrpcArmClient
+from .hdz_grpc_msg import hdz_grpc_msg_pb2
 
 
 @dataclass
@@ -29,7 +31,11 @@ class HdzUserInterfaceData:
 
 
 class HdzUserInterface:
-    def __init__(self, infer_callback, grasp_callback, logger=get_logger("hdz_user_interface")):
+    def __init__(
+        self,
+        infer_callback,
+        logger=get_logger("hdz_user_interface"),
+    ):
         self.logger = logger
 
         self.data = HdzUserInterfaceData()
@@ -40,9 +46,9 @@ class HdzUserInterface:
         self.rect_start = None
         self.rect_drawing = False
 
-        self.infer_callback = infer_callback
-        self.grasp_callback = grasp_callback
         self.grasp_pose = None
+        self.infer_callback = infer_callback
+        self.arm_client = HdzGrpcArmClient("localhost", 9999)
 
         self.user_interface_thread = threading.Thread(target=self.__user_interface_entry)
         self.user_interface_thread.start()
@@ -81,10 +87,15 @@ class HdzUserInterface:
                 cv2.imshow(self.cv_window_name, img_with_mask)
                 key = cv2.waitKey(10) & 0xFF
 
-                # if key == ord("1"):
-                #     self.logger.info("Key 1 pressed")
-                # elif key == ord("2"):
-                #     self.logger.info("Key 2 pressed")
+                if key == ord("0"):
+                    self.logger.info("Key 0 pressed. Return to home position")
+                    self.arm_client.MoveToNamed("ready")
+                elif key == ord("1"):
+                    self.logger.info("Key 1 pressed. Open gripper")
+                    self.arm_client.SetGripper(1.0)
+                elif key == ord("2"):
+                    self.logger.info("Key 2 pressed. Close gripper")
+                    self.arm_client.SetGripper(0.0)
 
             except:
                 time.sleep(0.1)
@@ -126,7 +137,7 @@ class HdzUserInterface:
 
         elif event == cv2.EVENT_MBUTTONDOWN:
             self.logger.info("Middle mouse button pressed")
-            self.grasp_callback(self.grasp_pose)
+            self.arm_client.MoveTo(self.grasp_pose)
 
         elif event == cv2.EVENT_RBUTTONDOWN:
             self.logger.info("Right mouse button pressed")

@@ -17,7 +17,7 @@ class GreeterStub(object):
             channel: A grpc.Channel.
         """
         self.SayHello = channel.unary_unary(
-                '/hdz_grpc_msg.Greeter/SayHello',
+                '/grasp_model_grpc_msg.Greeter/SayHello',
                 request_serializer=grasp__model__grpc__msg_dot_grasp__model__grpc__msg__pb2.StrMsg.SerializeToString,
                 response_deserializer=grasp__model__grpc__msg_dot_grasp__model__grpc__msg__pb2.StrMsg.FromString,
                 )
@@ -44,7 +44,7 @@ def add_GreeterServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'hdz_grpc_msg.Greeter', rpc_method_handlers)
+            'grasp_model_grpc_msg.Greeter', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -65,7 +65,7 @@ class Greeter(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/hdz_grpc_msg.Greeter/SayHello',
+        return grpc.experimental.unary_unary(request, target, '/grasp_model_grpc_msg.Greeter/SayHello',
             grasp__model__grpc__msg_dot_grasp__model__grpc__msg__pb2.StrMsg.SerializeToString,
             grasp__model__grpc__msg_dot_grasp__model__grpc__msg__pb2.StrMsg.FromString,
             options, channel_credentials,
@@ -82,7 +82,7 @@ class GraspModelStub(object):
             channel: A grpc.Channel.
         """
         self.GenerateFromPointCloud = channel.unary_unary(
-                '/hdz_grpc_msg.GraspModel/GenerateFromPointCloud',
+                '/grasp_model_grpc_msg.GraspModel/GenerateFromPointCloud',
                 request_serializer=grasp__model__grpc__msg_dot_grasp__model__grpc__msg__pb2.PointCloud.SerializeToString,
                 response_deserializer=grasp__model__grpc__msg_dot_grasp__model__grpc__msg__pb2.PoseStamped.FromString,
                 )
@@ -107,7 +107,7 @@ def add_GraspModelServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'hdz_grpc_msg.GraspModel', rpc_method_handlers)
+            'grasp_model_grpc_msg.GraspModel', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -126,7 +126,7 @@ class GraspModel(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/hdz_grpc_msg.GraspModel/GenerateFromPointCloud',
+        return grpc.experimental.unary_unary(request, target, '/grasp_model_grpc_msg.GraspModel/GenerateFromPointCloud',
             grasp__model__grpc__msg_dot_grasp__model__grpc__msg__pb2.PointCloud.SerializeToString,
             grasp__model__grpc__msg_dot_grasp__model__grpc__msg__pb2.PoseStamped.FromString,
             options, channel_credentials,
