@@ -48,7 +48,7 @@ class HdzUserInterface:
 
         self.grasp_pose = None
         self.infer_callback = infer_callback
-        self.arm_client = HdzGrpcArmClient("localhost", 9999)
+        self.arm_client = HdzGrpcArmClient("192.168.1.150", 9999)
 
         self.user_interface_thread = threading.Thread(target=self.__user_interface_entry)
         self.user_interface_thread.start()
