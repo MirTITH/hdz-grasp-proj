@@ -32,6 +32,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     tf_prefix = LaunchConfiguration("tf_prefix")
     use_sim_time = LaunchConfiguration("use_sim_time")
     gui = LaunchConfiguration("gui")
+    gui_only = LaunchConfiguration("gui_only").perform(context)
     launch_servo = LaunchConfiguration("launch_servo")
 
     # MoveIt Configuration
@@ -162,7 +163,10 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         output="screen",
     )
 
-    nodes_to_start = [move_group_node, rviz_node, servo_node]
+    if gui_only == "true":
+        nodes_to_start = [rviz_node]
+    else:
+        nodes_to_start = [move_group_node, rviz_node, servo_node]
 
     return nodes_to_start
 
@@ -200,6 +204,7 @@ def generate_launch_description():
         )
     )
     declared_arguments.append(DeclareLaunchArgument("gui", default_value="true", description="Launch RViz?"))
+    declared_arguments.append(DeclareLaunchArgument("gui_only", default_value="false", description="Just launch RViz?"))
     declared_arguments.append(DeclareLaunchArgument("launch_servo", default_value="false", description="Launch Servo?"))
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
