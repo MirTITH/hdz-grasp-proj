@@ -2,39 +2,15 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image, PointCloud2, CameraInfo
 from std_msgs.msg import Header
-from .fps_counter import FrameRateCounter
+from .common_utils import FrameRateCounter, DataAligner, AlignedDataCollection, PointCloudUtils
 from cv_bridge import CvBridge
 import cv2
-from .data_aligner import DataAligner, AlignedDataCollection
 from sensor_msgs_py import point_cloud2
-from .point_cloud_utils import PointCloudUtils
 from .grasp_model_client import GraspModelClient
 import numpy as np
 from tf2_ros import TransformBroadcaster, StaticTransformBroadcaster
 from geometry_msgs.msg import TransformStamped
 from scipy.spatial.transform import Rotation
-
-
-def ShowImage(img_msg: Image, window_name: str):
-    cv_image = CvBridge().imgmsg_to_cv2(img_msg, desired_encoding="bgr8")
-    cv2.imshow(window_name, cv_image)
-    cv2.waitKey(1)
-
-
-def ShowDepth(img_msg: Image, window_name: str):
-    # Convert ROS Image message to OpenCV image
-    depth_image = CvBridge().imgmsg_to_cv2(img_msg, desired_encoding="16UC1")
-
-    # Normalize depth image for display
-    depth_image_normalized = cv2.normalize(depth_image, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
-
-    # Apply colormap to depth image for better visualization
-    depth_image_colored = cv2.applyColorMap(depth_image_normalized, cv2.COLORMAP_JET)
-
-    # Display the image
-    cv2.imshow("Depth Image", depth_image_colored)
-    cv2.waitKey(1)
-
 
 class HdzFrontEndNode(Node):
     def __init__(self):
