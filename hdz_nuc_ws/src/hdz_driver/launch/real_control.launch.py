@@ -251,7 +251,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "ag95_com_port",
-            default_value="/dev/ttyUSB2",
+            default_value="/dev/ttyUSB1",
             description="COM port of the gripper.",
         )
     )

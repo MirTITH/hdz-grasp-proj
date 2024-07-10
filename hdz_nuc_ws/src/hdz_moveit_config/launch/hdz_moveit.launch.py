@@ -13,12 +13,14 @@ from launch.launch_context import LaunchContext
 from launch_ros.parameter_descriptions import ParameterValue
 import yaml
 
+
 def common_load_yaml(file_path):
     try:
         with open(file_path, "r") as file:
             return yaml.load(file, Loader=yaml.FullLoader)
     except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
         return None
+
 
 def launch_setup(context: LaunchContext, *args, **kwargs):
     this_package_share_directory = get_this_package_share_directory(context)
@@ -102,6 +104,8 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         "warehouse_host": warehouse_sqlite_path,
     }
 
+    moveit_sensor_config = common_load_yaml(os.path.join(this_package_share_directory, "config/sensors_3d.yaml"))
+
     # Start the actual move_group node/action server
     move_group_node = Node(
         package="moveit_ros_move_group",
@@ -119,6 +123,10 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
             planning_scene_monitor_parameters,
             {"use_sim_time": use_sim_time},
             warehouse_ros_config,
+            # moveit_sensor_config,
+            # {"octomap_frame": "world"},
+            # {"octomap_resolution": 0.02},
+            # {"max_range": 2.0},
         ],
     )
 
