@@ -22,7 +22,8 @@ message PointCloud {
   uint32 height = 3; // If the cloud is unordered, height is 1
   uint32 width = 4;  // If the cloud is unordered, width is the number of points.
   bool is_dense = 5; // True if there are no invalid points
-  bytes data = 6; // type: float32; values: x0, y0, z0, x1, y1, z1, ...
+  bytes data = 6; // dtype: float32; values: x0, y0, z0, x1, y1, z1, ...
+  bytes user_mask = 7; // dtype: bool
 }
 
 message StrMsg {

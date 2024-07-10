@@ -54,7 +54,10 @@ class HdzFrontEndNode(Node):
         self.pcl_pub = self.create_publisher(PointCloud2, "hdz_front_end/point_cloud", 10)
 
         self.pcl_np = None
+        self.pcl_mask = None
         self.pcl_np_frame_name = ""
+        self.user_img_mask = np.zeros((480, 640), dtype=bool)
+        self.user_img_mask[200:400, 300:500] = True
 
         self.data_aligner = DataAligner(
             data_configs=[
@@ -97,9 +100,11 @@ class HdzFrontEndNode(Node):
 
         # Mix the RGB and depth images
         mixed_image = cv2.addWeighted(rgb_np, 0.5, depth_image_colored, 0.5, 0)
+        mask_image = cv2.cvtColor(self.user_img_mask.astype(np.uint8) * 255, cv2.COLOR_GRAY2BGR)
+        mixed_image = cv2.addWeighted(mixed_image, 0.5, mask_image, 0.5, 0)
         cv2.imshow("Mixed Image", mixed_image)
-        cv2.imshow("RGB Image", rgb_np)
-        cv2.imshow("Depth Image", depth_image_colored)
+        # cv2.imshow("RGB Image", rgb_np)
+        # cv2.imshow("Depth Image", depth_image_colored)
         cv2.waitKey(1)
 
         rgb_timestamp = self.data_aligner.get_timestamp(rgb_msg)
@@ -110,16 +115,25 @@ class HdzFrontEndNode(Node):
             )
 
         depth_np = self.pcl_util.convert_depth_msg_to_np(depth_msg)
-        pcl_np = self.pcl_util.generate_pcl_np(depth_np)
+
+        try:
+            pcl_np, pcl_mask = self.pcl_util.generate_pcl_np(depth_np, self.user_img_mask)
+        except ValueError:
+            return
+
         self.pcl_np = pcl_np
+        self.pcl_mask = pcl_mask
         self.pcl_np_frame_name = depth_msg.header.frame_id
-        if pcl_np is not None:
-            pcl_msg = self.pcl_util.convert_pcl_to_msg(pcl_np, rgb_msg.header)
-            self.pcl_pub.publish(pcl_msg)
+        # pcl_msg = self.pcl_util.convert_pcl_to_msg(pcl_np, rgb_msg.header)
+        # self.pcl_pub.publish(pcl_msg)
 
     def timer_callback(self):
         if self.pcl_np is not None:
-            response = self.grasp_model_client.generate_from_pointcloud(self.pcl_np, self.pcl_np_frame_name)
+            response = self.grasp_model_client.generate_from_pointcloud(
+                pcd=self.pcl_np,
+                frame_name=self.pcl_np_frame_name,
+                user_mask=self.pcl_mask,
+            )
             self.get_logger().info(str(response))
             self.broadcast_grasp_target(response.pose.position, response.pose.orientation, self.pcl_np_frame_name)
 

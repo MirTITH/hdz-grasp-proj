@@ -4,6 +4,7 @@ from grasp_model_grpc_msg.grasp_model_grpc_msg_pb2 import PointCloud, StrMsg, Po
 import numpy as np
 from tqdm import tqdm
 import logging
+from typing import Optional
 
 from grasp_model_grpc_msg.utils import PointCloud2Numpy, Numpy2PointCloud
 
@@ -14,8 +15,15 @@ class GraspModelClient:
         self.grasp_stub = grasp_model_grpc_msg_pb2_grpc.GraspModelStub(self.channel)
         self.greeter_stub = grasp_model_grpc_msg_pb2_grpc.GreeterStub(self.channel)
 
-    def generate_from_pointcloud(self, pcd: np.ndarray, frame_name: str = "") -> PoseStamped:
+    def generate_from_pointcloud(
+        self,
+        pcd: np.ndarray,
+        frame_name: str = "",
+        user_mask: Optional[np.ndarray] = None,
+    ) -> PoseStamped:
         pcd_msg = Numpy2PointCloud(pcd, frame_name)
+        if user_mask is not None:
+            pcd_msg.user_mask = user_mask.astype("bool").tobytes()
         response: PoseStamped = self.grasp_stub.GenerateFromPointCloud(pcd_msg)
         return response
 

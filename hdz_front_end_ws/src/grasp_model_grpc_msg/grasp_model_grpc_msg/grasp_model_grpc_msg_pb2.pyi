@@ -6,20 +6,22 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class PointCloud(_message.Message):
-    __slots__ = ("timestamp", "frame_name", "height", "width", "is_dense", "data")
+    __slots__ = ("timestamp", "frame_name", "height", "width", "is_dense", "data", "user_mask")
     TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     FRAME_NAME_FIELD_NUMBER: _ClassVar[int]
     HEIGHT_FIELD_NUMBER: _ClassVar[int]
     WIDTH_FIELD_NUMBER: _ClassVar[int]
     IS_DENSE_FIELD_NUMBER: _ClassVar[int]
     DATA_FIELD_NUMBER: _ClassVar[int]
+    USER_MASK_FIELD_NUMBER: _ClassVar[int]
     timestamp: _timestamp_pb2.Timestamp
     frame_name: str
     height: int
     width: int
     is_dense: bool
     data: bytes
-    def __init__(self, timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., frame_name: _Optional[str] = ..., height: _Optional[int] = ..., width: _Optional[int] = ..., is_dense: bool = ..., data: _Optional[bytes] = ...) -> None: ...
+    user_mask: bytes
+    def __init__(self, timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., frame_name: _Optional[str] = ..., height: _Optional[int] = ..., width: _Optional[int] = ..., is_dense: bool = ..., data: _Optional[bytes] = ..., user_mask: _Optional[bytes] = ...) -> None: ...
 
 class StrMsg(_message.Message):
     __slots__ = ("str",)

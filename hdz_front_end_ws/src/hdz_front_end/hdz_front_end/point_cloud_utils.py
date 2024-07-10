@@ -2,7 +2,7 @@ from sensor_msgs.msg import Image, CameraInfo, PointCloud2, PointField
 from cv_bridge import CvBridge
 import numpy as np
 import sensor_msgs_py.point_cloud2 as pc2
-from typing import Optional
+from typing import Optional, Tuple
 from std_msgs.msg import Header
 
 
@@ -22,9 +22,9 @@ class PointCloudUtils:
         self,
         depth_image: np.ndarray,
         additional_mask: Optional[np.ndarray] = None,
-    ) -> Optional[np.ndarray]:
+    ) -> Tuple[np.ndarray, Optional[np.ndarray]]:
         if self.intrinsics is None:
-            return None
+            raise ValueError("Intrinsics not set")
 
         fx, fy, cx, cy = self.intrinsics[0], self.intrinsics[4], self.intrinsics[2], self.intrinsics[5]
         height, width = depth_image.shape
@@ -36,12 +36,14 @@ class PointCloudUtils:
         # Mask out points where depth is zero
         mask = depth_image > 0
 
-        if additional_mask is not None:
-            mask = np.logical_and(additional_mask, mask)
-
         z = depth_image[mask] / 1000.0  # Convert depth image from mm to meters
         u = u[mask]
         v = v[mask]
+
+        if additional_mask is not None:
+            pcl_mask = additional_mask[mask]
+        else:
+            pcl_mask = None
 
         # Calculate x, y, z coordinates
         x = (u - cx) * z / fx
@@ -50,7 +52,7 @@ class PointCloudUtils:
         # Stack x, y, z into a single array of shape (N, 3)
         points = np.vstack((x, y, z)).transpose()
 
-        return points
+        return points, pcl_mask
 
     def convert_pcl_to_msg(
         self,
@@ -63,5 +65,12 @@ class PointCloudUtils:
             PointField(name="y", offset=4, datatype=PointField.FLOAT32, count=1),
             PointField(name="z", offset=8, datatype=PointField.FLOAT32, count=1),
         ]
+
+        # if mask is not None:
+        #     fields.append(PointField(name="mask", offset=12, datatype=PointField.FLOAT32, count=1))
+        #     cloud = np.concatenate((points, mask[:, None]), axis=1)
+        # else:
+        #     cloud = points
+
         point_cloud = pc2.create_cloud(header, fields, points)
         return point_cloud
