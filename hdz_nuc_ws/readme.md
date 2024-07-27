@@ -2,10 +2,8 @@
 
 ## Dependencies
 ```shell
-# for grpc
-sudo apt install -y build-essential autoconf libtool pkg-config
-python3 -m pip install --upgrade pip
-pip3 install grpcio grpcio-tools
+# for ros workspace
+rosdep install --from-paths src --ignore-src -r -y
 ```
 
 ## Build

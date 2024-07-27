@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package grasp_model;
+
+// import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "hdz_grpc_msg/hdz_grpc_common.proto";
+
+// Service definition.
+
+service Greeter {
+  rpc SayHello (hdz_grpc_common.StrMsg) returns (hdz_grpc_common.StrMsg);
+}
+
+service GraspModel {
+  rpc GenerateFromPointCloud (PointCloud) returns (hdz_grpc_common.PoseStamped);
+}
+
+// Message definition.
+message PointCloud {
+  google.protobuf.Timestamp timestamp = 1;
+  string frame_name = 2; // The coordinate frame name.
+  uint32 height = 3; // If the cloud is unordered, height is 1
+  uint32 width = 4;  // If the cloud is unordered, width is the number of points.
+  bool is_dense = 5; // True if there are no invalid points
+  bytes data = 6; // dtype: float32; values: x0, y0, z0, x1, y1, z1, ...
+  bytes user_mask = 7; // dtype: bool
+}
+

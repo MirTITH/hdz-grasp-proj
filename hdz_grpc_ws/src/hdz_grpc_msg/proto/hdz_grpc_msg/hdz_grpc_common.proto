@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package hdz_grpc_common;
+
+message StrMsg {
+    string str = 1;
+}
+
+message Point {
+    double x = 1;
+    double y = 2;
+    double z = 3;
+}
+
+message Quaternion {
+    double x = 1;
+    double y = 2;
+    double z = 3;
+    double w = 4;
+}
+
+message Pose {
+    Point position = 1;
+    Quaternion orientation = 2;
+}
+  
+message PoseStamped {
+    string frame_name = 1;
+    Pose pose = 2;
+}

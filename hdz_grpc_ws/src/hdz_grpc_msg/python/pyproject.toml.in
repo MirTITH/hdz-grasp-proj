@@ -1,0 +1,8 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hdz_grpc_msg"
+version = "@hdz_grpc_msg_VERSION@"
+dependencies = ["grpcio"]
