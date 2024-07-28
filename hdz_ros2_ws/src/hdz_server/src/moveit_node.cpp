@@ -13,8 +13,6 @@ MoveItNode::MoveItNode(const std::string &node_name)
     max_velocity_scaling_factor_     = this->get_parameter("max_velocity_scaling_factor").as_double();
     max_acceleration_scaling_factor_ = this->get_parameter("max_acceleration_scaling_factor").as_double();
     logger_.Info("Planning group: {}", planning_group_);
-    tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
-    tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 }
 
 void MoveItNode::Init()
@@ -54,11 +52,6 @@ void MoveItNode::PlanAndMove()
     }
 }
 
-auto MoveItNode::GetCurrentPose(const std::string &end_effector_link) const
-{
-    return move_group_->getCurrentPose(end_effector_link);
-}
-
 void MoveItNode::SetTargetPose(const geometry_msgs::msg::Pose &target_pose)
 {
     moveit::core::RobotState target_robot_state(*(move_group_->getCurrentState()));
@@ -79,28 +72,4 @@ void MoveItNode::SetTargetPose(const geometry_msgs::msg::Pose &target_pose)
     // }
 
     move_group_->setJointValueTarget(joint_group_positions);
-}
-
-void MoveItNode::Print(const rclcpp::Logger &logger, const geometry_msgs::msg::PoseStamped &msg, const std::string &prefix)
-{
-    RCLCPP_INFO(logger, "%sheader: {frame_id: %s, stamp: %d.%d}\npose: {position: [%lf, %lf, %lf], orientation: [%lf, %lf, %lf, %lf]}",
-                prefix.c_str(), msg.header.frame_id.c_str(), msg.header.stamp.sec, msg.header.stamp.nanosec,
-                msg.pose.position.x, msg.pose.position.y, msg.pose.position.z,
-                msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z, msg.pose.orientation.w);
-}
-
-void MoveItNode::Print(const rclcpp::Logger &logger, const geometry_msgs::msg::TransformStamped &msg, const std::string &prefix)
-{
-    RCLCPP_INFO(logger, "%sheader: {frame_id: %s, stamp: %d.%d}\ntransform: {translation: [%lf, %lf, %lf], rotation: [%lf, %lf, %lf, %lf]}",
-                prefix.c_str(), msg.header.frame_id.c_str(), msg.header.stamp.sec, msg.header.stamp.nanosec,
-                msg.transform.translation.x, msg.transform.translation.y, msg.transform.translation.z,
-                msg.transform.rotation.x, msg.transform.rotation.y, msg.transform.rotation.z, msg.transform.rotation.w);
-}
-
-void MoveItNode::Print(const rclcpp::Logger &logger, const geometry_msgs::msg::Pose &msg, const std::string &prefix)
-{
-    RCLCPP_INFO(logger, "%sposition: [%lf, %lf, %lf], orientation: [%lf, %lf, %lf, %lf]",
-                prefix.c_str(),
-                msg.position.x, msg.position.y, msg.position.z,
-                msg.orientation.x, msg.orientation.y, msg.orientation.z, msg.orientation.w);
 }

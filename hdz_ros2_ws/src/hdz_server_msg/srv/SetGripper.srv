@@ -1,0 +1,4 @@
+float64 normalized_width
+float64 max_effort
+---
+hdz_server_msg/Status status

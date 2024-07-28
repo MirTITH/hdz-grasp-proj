@@ -1,0 +1,5 @@
+string frame_id "world"
+---
+geometry_msgs/PoseStamped pose_stamped
+string eef_name
+hdz_server_msg/Status status

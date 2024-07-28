@@ -8,7 +8,7 @@
             "name": "start_server.launch.py",
             "type": "ros",
             "request": "launch",
-            "target": "${workspaceFolder}/src/hdz_grpc_server/launch/start_server.launch.py"
+            "target": "${workspaceFolder}/src/hdz_server/launch/start_server.launch.py"
         },
         {
             "name": "ROS: Launch",

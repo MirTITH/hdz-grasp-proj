@@ -28,7 +28,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     launch_entities.append(
         Node(
             package=this_package_name,
-            executable="hdz_grpc_server",
+            executable="hdz_server",
             # output="screen",
             parameters=[
                 {"use_sim_time": use_sim_time},
@@ -36,7 +36,6 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
                 {"max_velocity_scaling_factor": 0.15},
                 {"max_acceleration_scaling_factor": 0.15},
                 {"planning_group": "ur_manipulator"},
-                {"grpc_server_address": "0.0.0.0:9999"},
                 {"gripper_action_name": "/gripper_controller/gripper_cmd"},
                 {"gripper_close_joint_pos": 0.93},
                 {"gripper_open_joint_pos": 0.0},

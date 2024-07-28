@@ -22,12 +22,13 @@ void GripperNode::SendGripperCmd(double normalized_width, double max_effort)
 
     if (!this->gripper_client_->wait_for_action_server(1s)) {
         logger_.Error("Action server not available after waiting");
-        return;
+        throw std::runtime_error("Action server not available after waiting");
     }
 
     if (normalized_width < 0.0 || normalized_width > 1.0) {
-        logger_.Error("Unified width must be between 0.0 and 1.0");
-        return;
+        auto msg = fmt::format("Normalized width must be between 0.0 and 1.0, got: {}", normalized_width);
+        logger_.Error(msg);
+        throw std::runtime_error(msg);
     }
 
     auto goal_msg               = GripperCommand::Goal();
