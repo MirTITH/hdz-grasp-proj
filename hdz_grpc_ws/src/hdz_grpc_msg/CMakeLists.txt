@@ -62,6 +62,7 @@ protobuf_generate(TARGET ${PROJECT_NAME}
     LANGUAGE python
     IMPORT_DIRS ${PROTO_IMPORT_DIRS}
     PROTOC_OUT_DIR ${PROTO_BINARY_DIR}/python
+    PROTOC_OPTIONS --pyi_out=${PROTO_BINARY_DIR}/python
 )
 
 protobuf_generate(

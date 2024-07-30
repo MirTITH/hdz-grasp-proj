@@ -1,6 +1,3 @@
-[submodule "hdz_nuc_ws/non_ros_pkgs/src/fmt"]
-	path = hdz_ros2_ws/non_ros_pkgs/src/fmt
-	url = https://github.com/fmtlib/fmt.git
 [submodule "hdz_nuc_ws/non_ros_pkgs/src/grpc"]
 	path = hdz_grpc_ws/src/grpc
 	url = https://github.com/grpc/grpc.git

@@ -1,7 +1,0 @@
-/build
-/install
-/log
-/.vscode/*
-/.cache
-!/.vscode/launch.json
-!/.vscode/tasks.json

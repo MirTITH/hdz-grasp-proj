@@ -1,5 +1,6 @@
-from grasp_model_grpc_msg import grasp_model_grpc_msg_pb2, grasp_model_grpc_msg_pb2_grpc
-from grasp_model_grpc_msg.grasp_model_grpc_msg_pb2 import PointCloud, StrMsg, PoseStamped, Pose
+from hdz_grpc_msg import grasp_model_pb2, grasp_model_pb2_grpc, hdz_grpc_common_pb2
+from hdz_grpc_msg.grasp_model_pb2 import PointCloud
+from hdz_grpc_msg.hdz_grpc_common_pb2 import StrMsg, PoseStamped, Pose
 import numpy as np
 
 def PointCloud2Numpy(msg: PointCloud) -> np.ndarray:
@@ -23,18 +24,18 @@ def Numpy2PointCloud(pcd: np.ndarray, frame_name: str = "") -> PointCloud:
     pcd_msg.data = pcd.astype(np.float32).tobytes()
     return pcd_msg
 
-def ConvertToGrpcPoint(input) -> grasp_model_grpc_msg_pb2.Point:
+def ConvertToGrpcPoint(input) -> hdz_grpc_common_pb2.Point:
     if type(input) == np.ndarray:
         assert input.shape == (3,), "Input should only have 3 elements"
     else:
         assert len(input) == 3, "Input should only have 3 elements"
     
-    return grasp_model_grpc_msg_pb2.Point(x=input[0], y=input[1], z=input[2])
+    return hdz_grpc_common_pb2.Point(x=input[0], y=input[1], z=input[2])
 
-def ConvertToGrpcQuaternion(input) -> grasp_model_grpc_msg_pb2.Quaternion:
+def ConvertToGrpcQuaternion(input) -> hdz_grpc_common_pb2.Quaternion:
     if type(input) == np.ndarray:
         assert input.shape == (4,), "Input should only have 4 elements"
     else:
         assert len(input) == 4, "Input should only have 4 elements"
     
-    return grasp_model_grpc_msg_pb2.Quaternion(x=input[0], y=input[1], z=input[2], w=input[3])
+    return hdz_grpc_common_pb2.Quaternion(x=input[0], y=input[1], z=input[2], w=input[3])
