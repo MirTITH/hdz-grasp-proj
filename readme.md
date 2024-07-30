@@ -3,7 +3,7 @@
 How to clone this repo:
 
 ```shell
-git clone --recurse-submodules --shallow-submodules https://github.com/MirTITH/hdz_grasp_proj_v2.git
+git clone --recurse-submodules --shallow-submodules https://github.com/MirTITH/hdz-grasp-proj.git
 ```
 
 How to update submodules:
