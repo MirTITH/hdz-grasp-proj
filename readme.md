@@ -14,5 +14,5 @@ git submodule update --init --recursive --depth 1
 
 ## TODO
 
-- [ ] 发布夹爪 normalized_width 话题
 - [ ] 修复手肘撞框架的问题
+- [x] 发布夹爪 normalized_width 话题

@@ -146,11 +146,33 @@
                 </material>
             </visual>
             <collision>
-                <origin
-                    xyz="0 0 0"
-                    rpy="0 0 0" />
+                <origin xyz="0 0.20995 0.250326" rpy="0 0 0" />
                 <geometry>
-                    <mesh filename="package://hdz_base_description/meshes/hdz_steel_frame_link.STL" />
+                   <box size="0.250326 0.021692 0.503987"/>
+                </geometry>
+            </collision>
+            <collision>
+                <origin xyz="-0.132548 0 0.250326" rpy="0 0 ${radians(90)}" />
+                <geometry>
+                   <box size="0.430527 0.021692 0.503987"/>
+                </geometry>
+            </collision>
+            <collision>
+                <origin xyz="0 -0.210101 0.250326" rpy="0 0 0" />
+                <geometry>
+                   <box size="0.250326 0.021692 0.503987"/>
+                </geometry>
+            </collision>
+            <collision>
+                <origin xyz="0 0 0.493123" rpy="${radians(90)} 0 0" />
+                <geometry>
+                   <box size="0.286785 0.025388 0.44325"/>
+                </geometry>
+            </collision>
+            <collision>
+                <origin xyz="0.00297 0 0.595211" rpy="0 0 0" />
+                <geometry>
+                   <cylinder radius="0.052649" length="0.18"/>
                 </geometry>
             </collision>
         </link>
@@ -204,12 +226,11 @@
             </visual>
             <collision>
                 <origin
-                    xyz="0 0 0"
+                    xyz="0 0 0.05228"
                     rpy="0 0 0" />
-                <geometry>
-                    <mesh
-                        filename="package://hdz_base_description/meshes/hdz_ur_control_cabinet_link.STL" />
-                </geometry>
+               <geometry>
+                <box size="0.261088 0.383256 0.106136"/>
+               </geometry>
             </collision>
         </link>
         <joint

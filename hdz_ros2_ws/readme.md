@@ -1,6 +1,6 @@
 # HDZ NUC workspace
 
-## Dependencies
+## Install dependencies
 ```shell
 # colcon mixin (Optional)
 sudo apt install python3-colcon-common-extensions python3-colcon-mixin
@@ -22,3 +22,4 @@ If you didn't install mixin, use the following command instead:
 ```shell
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON --no-warn-unused-cli
 ```
+
