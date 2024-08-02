@@ -19,7 +19,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "robot_description_echo = ur_perception_scripts.robot_description_echo:main",
+            "robot_description_echo = hdz_scripts.robot_description_echo:main",
         ],
     },
 )

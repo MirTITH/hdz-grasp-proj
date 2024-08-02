@@ -1,25 +1,15 @@
 import os
 
-from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import (
-    IncludeLaunchDescription,
-    TimerAction,
-    DeclareLaunchArgument,
-    ExecuteProcess,
-    RegisterEventHandler,
-    LogInfo,
-)
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler, OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration
 from launch.event_handlers import OnExecutionComplete, OnProcessExit, OnProcessIO, OnProcessStart, OnShutdown
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from hdz_scripts import get_this_package_share_directory, add_use_sim_time
-from launch.launch_context import LaunchContext
-from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from hdz_full_description import get_robot_description_content
+from launch.launch_context import LaunchContext
 
 
 # helper function to spawn controllers
@@ -61,7 +51,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         Node(
             package="robot_state_publisher",
             executable="robot_state_publisher",
-            output="both",
+            output="screen",
             parameters=[
                 {
                     "robot_description": robot_description_content,
@@ -78,15 +68,9 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         arguments=["-entity", "hdz_full", "-topic", "robot_description"],
         output="screen",
     )
-    launch_entities.append(
-        TimerAction(
-            period=4.0,  # Wait for Gazebo to start
-            actions=[robot_spawn_action],
-        )
-    )
+    launch_entities.append(robot_spawn_action)
 
     # Spawn controllers
-    # Active controllers
     active_list = [
         "joint_state_broadcaster",
         "gripper_controller",
@@ -119,12 +103,12 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
 
     launch_entities.append(
         RegisterEventHandler(
-            OnExecutionComplete(
+            OnProcessExit(
                 target_action=robot_spawn_action,
-                on_completion=actions_after_robot_spawn,
+                on_exit=actions_after_robot_spawn,
             )
         )
-    ),
+    )
 
     return launch_entities
 

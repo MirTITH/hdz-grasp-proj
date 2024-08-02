@@ -15,4 +15,6 @@ git submodule update --init --recursive --depth 1
 ## TODO
 
 - [ ] 发布夹爪 normalized_width 话题
+- [ ] 适配 MoveIt 到 Gazebo
+- [ ] Gazebo 夹爪开闭速度限制
 - [x] 修复手肘撞框架的问题
