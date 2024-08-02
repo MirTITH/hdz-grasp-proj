@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
     <xacro:macro name="hdz_base_description" params="parent tf_prefix:=hdz_ *origin">
-        <link
-            name="${tf_prefix}base_link">
+        <link name="${tf_prefix}base_link">
             <inertial>
                 <origin
                     xyz="0.12543 -0.00028125 0.20317"
@@ -22,7 +21,7 @@
                     xyz="0 0 0"
                     rpy="0 0 0" />
                 <geometry>
-                    <mesh filename="package://hdz_base_description/meshes/hdz_base_link.STL" />
+                    <mesh filename="file://$(find hdz_base_description)/meshes/hdz_base_link.STL" />
                 </geometry>
                 <material
                     name="">
@@ -36,10 +35,20 @@
                     rpy="0 0 0" />
                 <geometry>
                     <mesh
-                        filename="package://hdz_base_description/meshes/hdz_base_link.STL" />
+                        filename="file://$(find hdz_base_description)/meshes/hdz_base_link.STL" />
                 </geometry>
             </collision>
         </link>
+
+        <!-- <gazebo reference="${tf_prefix}base_link">
+            <collision>
+                <surface>
+                    <contact>
+                        <collide_bitmask>0x1</collide_bitmask>
+                    </contact>
+                </surface>
+            </collision>
+        </gazebo> -->
 
         <!-- base_joint fixes base_link to the environment -->
         <joint name="${tf_prefix}base_joint" type="fixed">
@@ -70,7 +79,7 @@
                     rpy="0 0 0" />
                 <geometry>
                     <mesh
-                        filename="package://hdz_base_description/meshes/hdz_extend_board_link.STL" />
+                        filename="file://$(find hdz_base_description)/meshes/hdz_extend_board_link.STL" />
                 </geometry>
                 <material
                     name="">
@@ -84,7 +93,7 @@
                     rpy="0 0 0" />
                 <geometry>
                     <mesh
-                        filename="package://hdz_base_description/meshes/hdz_extend_board_link.STL" />
+                        filename="file://$(find hdz_base_description)/meshes/hdz_extend_board_link.STL" />
                 </geometry>
             </collision>
         </link>
@@ -137,7 +146,7 @@
                     rpy="0 0 0" />
                 <geometry>
                     <mesh
-                        filename="package://hdz_base_description/meshes/hdz_steel_frame_link.STL" />
+                        filename="file://$(find hdz_base_description)/meshes/hdz_steel_frame_link.STL" />
                 </geometry>
                 <material
                     name="">
@@ -148,31 +157,31 @@
             <collision>
                 <origin xyz="0 0.20995 0.250326" rpy="0 0 0" />
                 <geometry>
-                   <box size="0.250326 0.021692 0.503987"/>
+                    <box size="0.250326 0.021692 0.503987" />
                 </geometry>
             </collision>
             <collision>
                 <origin xyz="-0.132548 0 0.250326" rpy="0 0 ${radians(90)}" />
                 <geometry>
-                   <box size="0.430527 0.021692 0.503987"/>
+                    <box size="0.430527 0.021692 0.503987" />
                 </geometry>
             </collision>
             <collision>
                 <origin xyz="0 -0.210101 0.250326" rpy="0 0 0" />
                 <geometry>
-                   <box size="0.250326 0.021692 0.503987"/>
+                    <box size="0.250326 0.021692 0.503987" />
                 </geometry>
             </collision>
             <collision>
                 <origin xyz="0 0 0.493123" rpy="${radians(90)} 0 0" />
                 <geometry>
-                   <box size="0.286785 0.025388 0.44325"/>
+                    <box size="0.286785 0.025388 0.44325" />
                 </geometry>
             </collision>
             <collision>
                 <origin xyz="0.00297 0 0.595211" rpy="0 0 0" />
                 <geometry>
-                   <cylinder radius="0.052649" length="0.18"/>
+                    <cylinder radius="0.052649" length="0.18" />
                 </geometry>
             </collision>
         </link>
@@ -216,7 +225,7 @@
                     rpy="0 0 0" />
                 <geometry>
                     <mesh
-                        filename="package://hdz_base_description/meshes/hdz_ur_control_cabinet_link.STL" />
+                        filename="file://$(find hdz_base_description)/meshes/hdz_ur_control_cabinet_link.STL" />
                 </geometry>
                 <material
                     name="">
@@ -228,9 +237,9 @@
                 <origin
                     xyz="0 0 0.05228"
                     rpy="0 0 0" />
-               <geometry>
-                <box size="0.261088 0.383256 0.106136"/>
-               </geometry>
+                <geometry>
+                    <box size="0.261088 0.383256 0.106136" />
+                </geometry>
             </collision>
         </link>
         <joint

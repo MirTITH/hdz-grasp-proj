@@ -4,6 +4,7 @@
 
     <xacro:arg name="use_fake_hardware" default="false" />
     <xacro:arg name="fake_sensor_commands" default="false" />
+    <xacro:arg name="sim_gazebo" default="false" />
 
     <!-- The "world" link -->
     <link name="world" />
@@ -12,7 +13,7 @@
     <xacro:arg name="hdz_tf_prefix" default="hdz_" />
     <xacro:include filename="$(find hdz_base_description)/urdf/hdz_base_macro.xacro" />
     <xacro:hdz_base_description parent="world" tf_prefix="hdz_">
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 0.05" rpy="0 0 0" />
     </xacro:hdz_base_description>
 
     <!-- UR arm -->

@@ -22,5 +22,6 @@
         com_port="$(arg ag95_com_port)"
         use_mock_hardware="$(arg use_fake_hardware)"
         mock_sensor_commands="$(arg fake_sensor_commands)"
+        sim_gazebo="$(arg sim_gazebo)"
     />
 </robot>
