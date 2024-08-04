@@ -38,7 +38,7 @@ joint_state_broadcaster:
     interfaces:
       - position
       - velocity
-      # - effort
+      - effort
     joints:
       - shoulder_pan_joint
       - shoulder_lift_joint

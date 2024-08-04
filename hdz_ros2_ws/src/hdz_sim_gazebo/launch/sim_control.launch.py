@@ -33,14 +33,21 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
 
     # Gazebo
     gazebo_world = ""
-    # gazebo_world = os.path.join(this_package_share_directory, "gazebo_world/s4.xml")
+    gazebo_world = os.path.join(this_package_share_directory, "gazebo_world/static_box.world")
 
-    launch_entities.append(
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([FindPackageShare("gazebo_ros"), "/launch", "/gazebo.launch.py"]),
-            launch_arguments={"world": gazebo_world}.items(),
+    if gazebo_world == "":
+        launch_entities.append(
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([FindPackageShare("gazebo_ros"), "/launch", "/gazebo.launch.py"]),
+            )
         )
-    )
+    else:
+        launch_entities.append(
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([FindPackageShare("gazebo_ros"), "/launch", "/gazebo.launch.py"]),
+                launch_arguments={"world": gazebo_world}.items(),
+            )
+        )
 
     # Robot State Publisher
     robot_description_content = get_robot_description_content(
