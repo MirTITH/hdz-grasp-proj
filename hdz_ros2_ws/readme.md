@@ -23,3 +23,22 @@ If you didn't install mixin, use the following command instead:
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON --no-warn-unused-cli
 ```
 
+## Usage
+
+### Gazebo
+```shell
+ros2 launch hdz_sim_gazebo sim_control.launch.py
+ros2 launch hdz_moveit_config hdz_moveit.launch.py use_fake_hardware:=true use_sim_time:=true
+```
+
+### Fake Hardware
+```shell
+ros2 launch hdz_driver fake_control.launch.py
+ros2 launch hdz_moveit_config hdz_moveit.launch.py use_fake_hardware:=true
+```
+
+### Real Hardware
+```shell
+ros2 launch hdz_driver real_control.launch.py
+ros2 launch hdz_moveit_config hdz_moveit.launch.py
+```
