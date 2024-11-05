@@ -14,11 +14,12 @@ rosdep install --from-paths src --ignore-src -r -y
 ## Build
 
 ### Build colcon workspace packages
+If you have installed colcon mixin, use the following command:
 ```shell
 colcon build --symlink-install --mixin release compile-commands
 ```
 
-If you didn't install mixin, use the following command instead:
+If you have not installed colcon mixin, use the following command instead:
 ```shell
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON --no-warn-unused-cli
 ```

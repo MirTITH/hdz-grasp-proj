@@ -6,6 +6,7 @@
 
 ```shell
 sudo apt install -y build-essential autoconf libtool pkg-config ninja-build
+python3 -m pip install --upgrade pip
 ./build_install.sh
 ```
 
